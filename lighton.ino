@@ -22,15 +22,18 @@ void loop() {
     input_data = Serial.read();
     //if() 사용
     //데이터가 A 바코드와 일치하는 경우 LED가 켜짐
-    if (input_data == 'A'){
+    if (input_data == 'Y'){
       Serial.print("A");
-      motorSwitch = !motorSwitch;
+      motorSwitch = true;
+    } else if (input_data == 'N'){
+      motorSwitch = false;
     }
   }
   
   if(digitalRead(sw) == HIGH) {
     tactSw = true;
   }
+  
   if(digitalRead(sw) == LOW && tactSw == true) {
     tactSw = false;
     motorSwitch  = !motorSwitch ;

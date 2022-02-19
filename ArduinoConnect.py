@@ -1,7 +1,6 @@
 import time
+
 import serial
-import firebase_admin
-from firebase_admin import credentials
 from firebase_admin import db
 
 def executeArduino():
@@ -9,18 +8,22 @@ def executeArduino():
     print(dir.get())
 
     ser = serial.Serial(
-        port='COM3',
+        port='COM6',
         baudrate=9600
         )
-
     while True:
-        c = input()  # 유저가 입력 '1' 또는 '2' 테스트 하기 위해.
-        dir = db.reference('light/centerFirst')
-        print(dir.get())
-        if dir.get() == "Y":
-           c='A'
-           c = c.encode("utf-8")
-           ser.write(c)
+        if ser.readable():
+            dir = db.reference('light/centerFirst')
+            val = dir.get()
 
-        else:
-            pass
+            if val == 'Y':
+                val = val.encode('utf-8')
+                ser.write(val)
+                print("LED TURNED ON")
+                time.sleep(0.5)
+
+            elif val == 'N':
+                val = val.encode('utf-8')
+                ser.write(val)
+                print("LED TURNED OFF")
+                time.sleep(0.5)
